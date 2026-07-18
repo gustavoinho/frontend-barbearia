@@ -14,10 +14,7 @@ function App(){
 
       <Route path="/" element={<Cliente />} />
 
-      <Route 
- path="/barbeiro" 
- element={<Barbeiro/>}
-/>
+      <Route path="/barbeiro" element={<Barbeiro/>} />
 
     </Routes>
 
