@@ -340,6 +340,9 @@ fechado
 
 
 <div style={{marginBottom:20}}>
+  <button onClick={()=>setModo("data")}>
+    📅 Por Data
+  </button>
 
   <button onClick={()=>setModo("todos")} style={{marginLeft:10}}>
     📋 Todos
