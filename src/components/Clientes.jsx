@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from 'react';
 import api from "../api";
 import corte from "../imagens/corte.jpg";
 import sg from "../imagens/sg.jpg";
