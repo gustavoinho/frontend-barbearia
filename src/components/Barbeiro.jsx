@@ -10,6 +10,7 @@ const [senha,setSenha] = useState("");
 const [logado,setLogado] = useState(false);
 const [mostrarSenha,setMostrarSenha] = useState(false);
 const [fechado,setFechado] = useState(false);
+const [modo,setModo] = useState("data");
 
 
 function entrar(){
@@ -143,11 +144,10 @@ err.response?.data?.erro ||
 
 
 
-const agendaDoDia = agendamentos.filter(item=>{
-
-return item.data === dataSelecionada;
-
-});
+const agendamentosFiltrados =
+modo === "todos"
+? agendamentos
+: agendamentos.filter(item => item.data === dataSelecionada);
 
 
 
@@ -339,31 +339,35 @@ fechado
 
 
 
+<div style={{marginBottom:20}}>
+  <button onClick={()=>setModo("data")}>
+    📅 Por Data
+  </button>
+
+  <button onClick={()=>setModo("todos")} style={{marginLeft:10}}>
+    📋 Todos
+  </button>
+</div>
 
 
-
-<h2>
-Escolha o dia:
-</h2>
-
-
+{modo === "data" && (
+<>
+<h2>Escolha o dia:</h2>
 
 <input
-
 type="date"
-
 value={dataSelecionada}
-
 onChange={(e)=>setDataSelecionada(e.target.value)}
-
- />
+/>
+</>
+)}
 
 
 
 
 
 {
-agendaDoDia.length===0 && (
+agendamentosFiltrados.length===0 && (
 
 <p>
 Nenhum cliente marcado para esse dia.
@@ -379,7 +383,7 @@ Nenhum cliente marcado para esse dia.
 
 {
 
-agendaDoDia.map(item=>(
+agendamentosFiltrados.map(item=>(
 
 
 <div
