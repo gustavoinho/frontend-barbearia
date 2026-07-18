@@ -247,7 +247,7 @@ transform:scale(1.03);
   }
 }
 body{
-  background-image: url("../assets/imagens/fund.png");
+  background-image: url("../imagens/fund.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
