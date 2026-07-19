@@ -122,17 +122,21 @@ a{
 .menu-topo{
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  justify-content:center;
   background:#3e2723;
   color:white;
   padding:10px;
+  position:relative;
 }
+
 
 /* BOTÃO MENU */
 .btn-menu{
   font-size:25px;
   background:none;
   color:white;
+  position:absolute;
+  left:10px;
 }
 
 /* MENU LATERAL */
@@ -190,10 +194,9 @@ a{
   cursor:pointer;
 }
 .logo-img{
-  width: 220px;
-height:auto;
-object-fit:contain;
-mix-blend-mode: multiply;
+  width:220px;
+  height:auto;
+  object-fit:contain;
 }
 .produtos {
   display:flex;
