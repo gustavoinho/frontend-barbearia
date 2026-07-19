@@ -608,11 +608,11 @@ padding:"30px",
 textAlign:"center"
 }}>
 
-<h2>
+<h2 className="mensagem-fechado">
 Estamos fechados hoje!
 </h2>
 
-<p>
+<p className="mensagem-fechado">
 Volte outro dia para realizar seu agendamento.
 </p>
 

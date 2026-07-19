@@ -360,3 +360,9 @@ button:hover {
   margin-bottom: 8px;
   line-height: 1.5;
 }
+.mensagem-fechado{
+  color:red;
+  font-weight:900;
+  -webkit-text-stroke:1px white;
+  text-shadow:0 2px 4px rgba(0,0,0,0.5);
+}
