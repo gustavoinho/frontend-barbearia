@@ -313,7 +313,7 @@ button:hover {
   font-weight:700;
   text-shadow:0 1px 3px rgba(255,255,255,0.8);
 }
-#sobre {
+.container-sobre {
   background: rgba(255,255,255,0.35); /* branco transparente */
   backdrop-filter: blur(8px);
   padding: 20px;

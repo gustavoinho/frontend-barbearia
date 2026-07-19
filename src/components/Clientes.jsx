@@ -674,7 +674,7 @@ prev === produtos.length - 1 ? 0 : prev + 1
 
 )}
     {aba === "sobre" && (
-  <div id="sobre" className="fade-text" style={{marginTop:40}}>
+  <div id="sobre" className="fade-text container-sobre" style={{marginTop:40}}>
 
     <h2>Sobre</h2>
 
