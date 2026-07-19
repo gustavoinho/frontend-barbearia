@@ -298,26 +298,16 @@ const produtos = [
      descricao: "A nova fórmula do Dom Pelo 15% foi desenvolvida para integrar sua rotina de cuidados com a barba e os cabelos. Com alta concentração e aplicação prática, é uma opção para quem busca estimular o crescimento dos fios de forma consistente, seguindo as orientações de uso."
   }
 ];
-function comprarProduto(produto,tipo){
+function comprarProduto(produto){
 
-  api.post("/compras",{
-    nomeCliente: nome || "Cliente",
-    produto: produto.nome,
-  })
-  .then(()=>{
+  const msg = `Olá, estou interessado em um produto: ${produto.nome}`;
 
-    if(tipo === "whatsapp"){
-
-      const msg = `Olá, quero comprar ${produto.nome}`;
-      
-      window.open(`https://wa.me/5541998289353?text=${encodeURIComponent(msg)}`);
-
-    }
-
-  })
+  window.open(
+    `https://wa.me/5541998289353?text=${encodeURIComponent(msg)}`,
+    "_blank"
+  );
 
 }
-
 return(
   <div
     style={{
@@ -636,7 +626,7 @@ className="img-produto-carrossel"
 <button
 className="verde"
 onClick={()=>
-comprarProduto(produtos[indexProduto],"whatsapp")
+comprarProduto(produtos[indexProduto])
 }
 >
 Comprar no WhatsApp
