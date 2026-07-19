@@ -25,6 +25,15 @@ const [fechado,setFechado] = useState(false);
   const [telefone,setTelefone] = useState("");
 const [indexProduto, setIndexProduto] = useState(0);
 const [mostrarDescricao,setMostrarDescricao] = useState(false);
+useEffect(()=>{
+
+  if(fechado){
+    setAba("produtos");
+  }else{
+    setAba("agendar");
+  }
+
+},[fechado]);
   useEffect(()=>{
 
 function verificar(){
@@ -350,7 +359,9 @@ Estamos fechados hoje!
   <div className="menu-lateral">
 
     <p onClick={()=>{
-  setAba("agendar");
+  if(!fechado){
+    setAba("agendar");
+  }
   setMenuAberto(false);
 }}>
   Agendar
@@ -586,12 +597,7 @@ className="img-servico"
 </div>
 
 )}
-{aba === "agendar" && fechado && (
-<>
-<div style={{
-padding:"30px",
-textAlign:"center"
-}}>
+
 
 <h2 className="mensagem-fechado">
 Estamos fechados hoje!
