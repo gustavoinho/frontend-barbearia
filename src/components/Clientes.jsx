@@ -94,13 +94,10 @@ function temLuzes(){
 
 
 function total(){
-
   return servicosSelecionados.reduce((soma,s)=>{
-    return soma + s.preco;
+    return soma + Number(s.preco || 0);
   },0);
-
 }
-
 
   useEffect(()=>{
     api.get("/servicos")
@@ -114,38 +111,34 @@ function total(){
 
   function buscarHorarios(valor){
 
+  if(!valor) return; // 🛑 evita crash
 
-    const dia = new Date(valor+"T00:00:00").getDay();
+  const dataObj = new Date(valor + "T00:00:00");
 
-
-    if(dia === 0){
-
-      alert("Domingo não funciona!");
-
-      setData("");
-      setHorarios([]);
-
-      return;
-    }
-
-
-
-    setData(valor);
-
-
-
-    api.get(`/horarios/${valor}`)
-    .then(res=>{
-
-      setHorarios(res.data);
-
-    });
-
-
+  if (isNaN(dataObj)) {
+    console.log("Data inválida:", valor);
+    return;
   }
 
+  const dia = dataObj.getDay();
 
+  if(dia === 0){
+    alert("Domingo não funciona!");
+    setData("");
+    setHorarios([]);
+    return;
+  }
 
+  setData(valor);
+
+  api.get(`/horarios/${valor}`)
+  .then(res=>{
+    setHorarios(res.data);
+  })
+  .catch(err=>{
+    console.log("Erro horários:", err);
+  });
+}
 
 
 
@@ -163,13 +156,19 @@ function total(){
 
 
 function formatarDataBR(dataISO){
-  const [ano, mes, dia] = dataISO.split("-");
+  if(!dataISO) return "";
+
+  const partes = dataISO.split("-");
+  if(partes.length !== 3) return dataISO;
+
+  const [ano, mes, dia] = partes;
   return `${dia}/${mes}/${ano}`;
 }
 
 
 
-  function confirmarAgendamento(){
+  async function confirmarAgendamento(){
+    try{
 
 
 
@@ -192,23 +191,19 @@ function formatarDataBR(dataISO){
 
 
 
-    api.post("/clientes",{
+    await api.post("/clientes",{
 
-      nome,
-      telefone
+  nome,
+  telefone
 
-    })
-
-
-
-    .then(()=>{
+});
 
 
-      const formData = new FormData();
+const formData = new FormData();
 
 formData.append("cliente", nome);
 formData.append("servico", servicosSelecionados.map(s=>s.nome).join(", "));
-formData.append("data", formatarDataBR(data));
+formData.append("data", data);
 formData.append("horario", horarioEscolhido);
 formData.append("pagamento", pagamento);
 formData.append("total", total());
@@ -217,21 +212,14 @@ if (comprovante) {
   formData.append("comprovante", comprovante);
 }
 
-return api.post("/agendamentos", formData, {
+await api.post("/agendamentos", formData, {
   headers: {
     "Content-Type": "multipart/form-data"
   }
 });
 
 
-    })
-
-
-
-    .then(()=>{
-
-
-      alert("Agendamento realizado!");
+alert("Agendamento realizado!");
 
 
 
@@ -245,11 +233,7 @@ return api.post("/agendamentos", formData, {
 
 
 
-    })
-
-
-
-    .catch(err=>{
+    }catch(err){
 
 
       alert(
@@ -258,7 +242,7 @@ return api.post("/agendamentos", formData, {
       );
 
 
-    });
+    }
 
 
   }
@@ -473,24 +457,27 @@ className="img-servico"
 
         <h2>Horários:</h2>
 
-        {
-          horarios.map(item=>(
-  <button
-    key={item.horario}
-    disabled={item.ocupado}
-    onClick={()=>setHorarioEscolhido(item.horario)}
- className={
-  horarioEscolhido === item.horario
-  ? "amarelo selecionado"
-  : "amarelo"
-}
-  >
-    {item.horario}
-    {item.ocupado && " - Ocupado"}
-  </button>
-))
-        }
+       {
+  Array.isArray(horarios) && horarios.map((item) => {
+    if (!item || !item.horario) return null;
 
+    return (
+      <button
+        key={item.horario}
+        disabled={item.ocupado}
+        onClick={() => setHorarioEscolhido(item.horario)}
+        className={
+          horarioEscolhido === item.horario
+            ? "amarelo selecionado"
+            : "amarelo"
+        }
+      >
+        {item.horario}
+        {item.ocupado && " - Ocupado"}
+      </button>
+    );
+  })
+}
         {horarioEscolhido && (
           <div>
 
@@ -570,7 +557,7 @@ className="img-servico"
 
               </div>
             )}
-            {formaPagamento === "pix" && (
+            {pagamento === "pix" && (
   <div className="card">
     <label>Enviar comprovante do PIX:</label>
     
