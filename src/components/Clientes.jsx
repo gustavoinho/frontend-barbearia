@@ -599,29 +599,6 @@ className="img-servico"
 )}
 
 
-<h2 className="mensagem-fechado">
-Estamos fechados hoje!
-</h2>
-
-<p className="mensagem-fechado">
-Volte outro dia para realizar seu agendamento.
-</p>
-
-</div>
-
-<div className="produtos">
-  {produtos.map((p, i) => (
-    <div 
-      key={i} 
-      className={`produto-card ${p.destaque ? "destaque" : ""}`}
-    >
-      <img src={p.img} alt={p.nome} />
-      <h3>{p.nome}</h3>
-    </div>
-  ))}
-</div>
-</>
-)}
 {aba === "produtos" && (
 
 <div className="fade-text">
