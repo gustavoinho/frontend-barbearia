@@ -19,6 +19,7 @@ const [fechado,setFechado] = useState(false);
   const [pagamento,setPagamento] = useState("");
   const [aba, setAba] = useState("agendar")
   const [data,setData] = useState("");
+  const [comprovante, setComprovante] = useState(null);
   const [horarios,setHorarios] = useState([]);
   const [horarioEscolhido,setHorarioEscolhido] = useState(null);
   const [nome,setNome] = useState("");
@@ -176,6 +177,7 @@ function formatarDataBR(dataISO){
       !nome ||
       !telefone ||
       !pagamento ||
+      (pagamento === "pix" && !comprovante) ||
       servicosSelecionados.length === 0 ||
       !data ||
       !horarioEscolhido
@@ -202,21 +204,24 @@ function formatarDataBR(dataISO){
     .then(()=>{
 
 
-      return api.post("/agendamentos",{
+      const formData = new FormData();
 
-        cliente:nome,
+formData.append("cliente", nome);
+formData.append("servico", servicosSelecionados.map(s=>s.nome).join(", "));
+formData.append("data", formatarDataBR(data));
+formData.append("horario", horarioEscolhido);
+formData.append("pagamento", pagamento);
+formData.append("total", total());
 
-        servico: servicosSelecionados.map(s=>s.nome).join(", "),
+if (comprovante) {
+  formData.append("comprovante", comprovante);
+}
 
-        data: formatarDataBR(data),
-
-        horario:horarioEscolhido,
-
-        pagamento,
-
-         total: total()
-
-      });
+return api.post("/agendamentos", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data"
+  }
+});
 
 
     })
@@ -565,6 +570,17 @@ className="img-servico"
 
               </div>
             )}
+            {formaPagamento === "pix" && (
+  <div className="card">
+    <label>Enviar comprovante do PIX:</label>
+    
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => setComprovante(e.target.files[0])}
+    />
+  </div>
+)}
 
            <button
            className="botao-agendar"
