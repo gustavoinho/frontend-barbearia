@@ -161,7 +161,10 @@ function total(){
   }
 
 
-
+function formatarDataBR(dataISO){
+  const [ano, mes, dia] = dataISO.split("-");
+  return `${dia}/${mes}/${ano}`;
+}
 
 
 
@@ -205,7 +208,7 @@ function total(){
 
         servico: servicosSelecionados.map(s=>s.nome).join(", "),
 
-        data,
+        data: formatarDataBR(data),
 
         horario:horarioEscolhido,
 
