@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import React from 'react';
 import api from "../api";
-import corte from "../imagens/corte.jpg";
-import sg from "../imagens/sg.jpg";
-import cb from "../imagens/cb.jpg";
-import csb from "../imagens/csb.jpg";
-import barba from "../imagens/barba.jpg";
-import pe from "../imagens/pe.jpg";
-import luzes from "../imagens/luzes.jpg";
 import logo from "../imagens/logo.png";
 import fund from "../imagens/fund.jfif";
 import relogio from "../imagens/relogio.jpg";
@@ -257,15 +250,7 @@ function total(){
 
 
 
-const imagens = {
-corte,
-sg,
-cb,
-csb,
-barba,
-pe,
-luzes
-};
+
 const produtos = [
   {
     nome: "Construa a vida ao seu redor",
@@ -418,8 +403,8 @@ setMenuAberto(false);
     <div className="card-servico">
       <h3>{servicos[indexServico]?.nome}</h3>
 
-      <img
-src={imagens[servicos[indexServico]?.imagem]}
+  <img
+src={servicos[indexServico]?.imagem ? `/imagens/${servicos[indexServico].imagem}` : ""}
 alt=""
 className="img-servico"
 />
