@@ -11,6 +11,21 @@ const [logado,setLogado] = useState(false);
 const [mostrarSenha,setMostrarSenha] = useState(false);
 const [fechado,setFechado] = useState(false);
 const [modo,setModo] = useState("data");
+function formatarData(data){
+
+  if(!data) return "-";
+
+  const dataLimpa = data.toString().split("T")[0];
+
+  const partes = dataLimpa.split("-");
+
+  if(partes.length !== 3){
+    return data;
+  }
+
+  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+}
 
 
 function entrar(){
@@ -147,7 +162,9 @@ err.response?.data?.erro ||
 const agendamentosFiltrados =
 modo === "todos"
 ? agendamentos
-: agendamentos.filter(item => item.data === dataSelecionada);
+: agendamentos.filter(item =>
+    item.data?.toString().split("T")[0] === dataSelecionada
+  );
 
 
 
@@ -439,16 +456,7 @@ rel="noopener noreferrer"
 
 <p>
 
-<strong>Data:</strong>
-
-{
-item.data
-?
-new Date(item.data+"T00:00:00").toLocaleDateString("pt-BR")
-:
-"-"
-}
-
+<strong>Data:</strong> {formatarData(item.data)}
 </p>
 
 
