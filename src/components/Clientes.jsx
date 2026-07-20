@@ -566,6 +566,7 @@ className="img-servico"
 
   <input
   type="file"
+  accept="*/*"
   onChange={(e) => setComprovante(e.target.files[0])}
 />
 </label>
