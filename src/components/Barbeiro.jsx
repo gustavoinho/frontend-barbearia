@@ -10,6 +10,7 @@ const [senha,setSenha] = useState("");
 const [logado,setLogado] = useState(false);
 const [mostrarSenha,setMostrarSenha] = useState(false);
 const [fechado,setFechado] = useState(false);
+const [pesquisaNome,setPesquisaNome] = useState("");
 const [modo,setModo] = useState("data");
 function formatarData(data){
 
@@ -159,12 +160,22 @@ err.response?.data?.erro ||
 
 
 
-const agendamentosFiltrados =
+const agendamentosFiltrados = 
+pesquisaNome.trim() !== ""
+?
+agendamentos.filter(item =>
+  item.cliente
+  ?.toLowerCase()
+  .includes(pesquisaNome.toLowerCase())
+)
+:
 modo === "todos"
-? agendamentos
-: agendamentos.filter(item =>
-    item.data?.toString().split("T")[0] === dataSelecionada
-  );
+?
+agendamentos
+:
+agendamentos.filter(item =>
+  item.data?.toString().split("T")[0] === dataSelecionada
+);
 
 
 
@@ -365,6 +376,22 @@ fechado
     📋 Todos
   </button>
 </div>
+<input
+type="text"
+placeholder="Pesquisar por nome do cliente"
+value={pesquisaNome}
+onChange={(e)=>{
+setPesquisaNome(e.target.value);
+
+if(e.target.value){
+setModo("todos");
+}
+}}
+style={{
+padding:"10px",
+width:"300px"
+}}
+/>
 
 
 {modo === "data" && (
@@ -494,7 +521,18 @@ item.pagamento==="local"
 }
 
 </p>
-
+{item.comprovante && (
+<p>
+<strong>Comprovante:</strong>{" "}
+<a
+href={`${api.defaults.baseURL}/uploads/${item.comprovante}`}
+target="_blank"
+rel="noopener noreferrer"
+>
+Abrir comprovante
+</a>
+</p>
+)}
 
 
 

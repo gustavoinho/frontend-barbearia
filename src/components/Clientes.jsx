@@ -565,10 +565,9 @@ className="img-servico"
   📎 Anexar comprovante
 
   <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => setComprovante(e.target.files[0])}
-  />
+  type="file"
+  onChange={(e) => setComprovante(e.target.files[0])}
+/>
 </label>
 
 {comprovante && (
