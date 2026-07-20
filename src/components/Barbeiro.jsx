@@ -497,11 +497,6 @@ item.pagamento==="local"
 
 
 
-<p>
-<strong>Status:</strong> {item.status}
-</p>
-
-
 
 <p>
 <strong>R$ {item.total || 0}</strong>

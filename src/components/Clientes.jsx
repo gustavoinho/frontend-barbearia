@@ -561,11 +561,21 @@ className="img-servico"
   <div className="card">
     <label>Enviar comprovante do PIX:</label>
     
-    <input
-      type="file"
-      accept="image/*"
-      onChange={(e) => setComprovante(e.target.files[0])}
-    />
+    <label className="botao-comprovante">
+  📎 Anexar comprovante
+
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => setComprovante(e.target.files[0])}
+  />
+</label>
+
+{comprovante && (
+  <p className="nome-comprovante">
+    Arquivo: {comprovante.name}
+  </p>
+)}
   </div>
 )}
 

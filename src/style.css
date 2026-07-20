@@ -378,3 +378,33 @@ button:hover {
   -webkit-text-stroke:1px black;
   text-shadow:0 2px 4px rgba(0,0,0,0.5);
 }
+.botao-comprovante{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#FFD700;
+  color:#000;
+  padding:12px 20px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+  border:none;
+}
+
+.botao-comprovante:hover{
+  transform:scale(1.05);
+  background:#ffea00;
+}
+
+.botao-comprovante input{
+  display:none;
+}
+
+.nome-comprovante{
+  margin-top:10px;
+  font-weight:bold;
+  color:#fff;
+  word-break:break-word;
+}
