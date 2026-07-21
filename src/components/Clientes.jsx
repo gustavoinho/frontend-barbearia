@@ -188,31 +188,50 @@ function formatarDataBR(dataISO){
 
 
 
-    if(
-      !nome ||
-      !telefone ||
-      !pagamento ||
-      (pagamento === "pix" && !comprovante) ||
-      servicosSelecionados.length === 0 ||
-      !data ||
-      !horarioEscolhido
-    ){
+    if(!nome.trim()){
+ alert("Digite o nome");
+ return;
+}
 
-      alert("Preencha todos os dados");
+if(!telefone){
+ alert("Digite o telefone");
+ return;
+}
 
-      return;
+if(!pagamento){
+ alert("Escolha o pagamento");
+ return;
+}
 
-    }
+if(pagamento === "pix" && !comprovante){
+ alert("Envie o comprovante PIX");
+ return;
+}
+
+if(servicosSelecionados.length === 0){
+ alert("Escolha um serviço");
+ return;
+}
+
+if(!data){
+ alert("Escolha a data");
+ return;
+}
+
+if(!horarioEscolhido){
+ alert("Escolha o horário");
+ return;
+}
 
 
 
 
-    await api.post("/clientes",{
-
+   const clienteResposta = await api.post("/clientes",{
   nome,
   telefone
-
 });
+
+console.log("Cliente:", clienteResposta.data);
 
 
 const formData = new FormData();
@@ -242,6 +261,7 @@ alert("Agendamento realizado!");
       setNome("");
       setTelefone("");
       setPagamento("");
+      setComprovante(null);
       setServicosSelecionados([]);
       setData("");
       setHorarios([]);
@@ -607,8 +627,14 @@ block:"center"
                   📎 Anexar comprovante
                   <input
                     type="file"
-                    accept="*/*"
-                    onChange={(e)=>setComprovante(e.target.files[0])}
+                    accept="image/*,.pdf"
+                    onChange={(e)=>{
+  const arquivo = e.target.files[0];
+
+  if(arquivo){
+    setComprovante(arquivo);
+  }
+}}
                   />
                 </label>
 
