@@ -13,6 +13,9 @@ import mino from "../imagens/mino.jpg";
 function Cliente(){
 const [fechado,setFechado] = useState(false);
   const [menuAberto, setMenuAberto] = useState(false);
+  const horarioRef = React.useRef(null);
+const dadosRef = React.useRef(null);
+const pagamentoRef = React.useRef(null);
   const [servicos,setServicos] = useState([]);
   const [servicosSelecionados,setServicosSelecionados] = useState([]);
   const [indexServico, setIndexServico] = useState(0);
@@ -65,7 +68,9 @@ return()=>clearInterval(intervalo);
 
 function toggleServico(servico){
 
-  const existe = servicosSelecionados.find(s=>s.id === servico.id);
+  const existe = servicosSelecionados.find(
+    s=>s.id === servico.id
+  );
 
   if(existe){
 
@@ -75,12 +80,23 @@ function toggleServico(servico){
 
   }else{
 
-    setServicosSelecionados(prev => [...prev,servico]);
+    setServicosSelecionados(prev => [
+      ...prev,
+      servico
+    ]);
+
+    setTimeout(()=>{
+
+      horarioRef.current?.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+
+    },300);
 
   }
 
 }
-
 
 
 function temLuzes(){
@@ -434,7 +450,7 @@ className="img-servico"
   </div>
 )}
 
-{servicosSelecionados.length > 0 && (
+<div>
       <div>
 
         <h2>Serviço escolhido:</h2>
@@ -446,7 +462,7 @@ className="img-servico"
         }
 
         <p><strong>Total: R$ {total()}</strong></p>
-
+        <div ref={horarioRef}>
         <h2>Escolha a data:</h2>
 
         <input
@@ -463,27 +479,36 @@ className="img-servico"
 
     return (
       <button
-        key={item.horario}
-        disabled={item.ocupado}
-        onClick={() => setHorarioEscolhido(item.horario)}
-        className={
-          horarioEscolhido === item.horario
-            ? "amarelo selecionado"
-            : "amarelo"
-        }
-      >
-        {item.horario}
-        {item.ocupado && " - Ocupado"}
-      </button>
+  key={item.horario}
+  disabled={item.ocupado}
+  onClick={() => {
+    setHorarioEscolhido(item.horario);
+
+    setTimeout(()=>{
+      dadosRef.current?.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+    },300);
+  }}
+  className={
+    horarioEscolhido === item.horario
+      ? "amarelo selecionado"
+      : "amarelo"
+  }
+>
+  {item.horario}
+  {item.ocupado && " - Ocupado"}
+</button>
     );
   })
 }
-        {horarioEscolhido && (
-          <div>
+      <div>
+          
 
             <p>Horário escolhido: {horarioEscolhido}</p>
 
-            <h2>Seus dados:</h2>
+            <h2 ref={dadosRef}>Seus dados:</h2>
 
            <input
   placeholder="Nome"
@@ -496,12 +521,29 @@ className="img-servico"
   placeholder="Telefone"
   value={telefone}
   onChange={(e) => {
-    const valor = e.target.value.replace(/\D/g, "") // remove tudo que não for número
-    setTelefone(valor)
-  }}
+
+const valor = e.target.value.replace(/\D/g, "");
+
+setTelefone(valor);
+
+
+if(valor.length >= 10){
+
+setTimeout(()=>{
+
+pagamentoRef.current?.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+},500);
+
+}
+
+}}
 />
 
-            <h2>Pagamento:</h2>
+            <h2 ref={pagamentoRef}>Pagamento:</h2>
 
            <button
   className={pagamento === "local" ? "amarelo selecionado" : "amarelo"}
@@ -557,54 +599,48 @@ className="img-servico"
 
               </div>
             )}
-            {pagamento === "pix" && (
-  <div className="card">
-    <label>Enviar comprovante do PIX:</label>
-    
-    <label className="botao-comprovante">
-  📎 Anexar comprovante
+  {pagamento === "pix" && (
+              <div className="card">
+                <label>Enviar comprovante do PIX:</label>
 
-  <input
-  type="file"
-  accept="*/*"
-  onChange={(e) => setComprovante(e.target.files[0])}
-/>
-</label>
+                <label className="botao-comprovante">
+                  📎 Anexar comprovante
+                  <input
+                    type="file"
+                    accept="*/*"
+                    onChange={(e)=>setComprovante(e.target.files[0])}
+                  />
+                </label>
 
-{comprovante && (
-  <p className="nome-comprovante">
-    Arquivo: {comprovante.name}
-  </p>
-)}
+                {comprovante && (
+                  <p className="nome-comprovante">
+                    Arquivo: {comprovante.name}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <button
+              className="botao-agendar"
+              onClick={confirmarAgendamento}
+              style={{
+                background:"#FFD700",
+                color:"#000",
+                padding:"12px",
+                border:"none",
+                borderRadius:"8px",
+                fontWeight:"bold",
+                marginTop:"10px"
+              }}
+            >
+              Confirmar agendamento
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 )}
-
-           <button
-           className="botao-agendar"
-  onClick={confirmarAgendamento}
-  style={{
-    background:"#FFD700",
-    color:"#000",
-    padding:"12px",
-    border:"none",
-    borderRadius:"8px",
-    fontWeight:"bold",
-    marginTop:"10px"
-  }}
->
-  Confirmar agendamento
-</button>
-
-          </div>
-        )}
-
-      </div>
-    )}
-</div>
-
-)}
-
-
 {aba === "produtos" && (
 
 <div className="fade-text">
@@ -709,7 +745,7 @@ prev === produtos.length - 1 ? 0 : prev + 1
 </a>
 
   </div>
-   </div>
+</div>
 );
 }
 
